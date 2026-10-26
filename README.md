@@ -1,110 +1,150 @@
+# 🐍⚙️ Kali Linux Lab Environment Setup
 
-
-<h1>🐍⚙️KALI LINUX LAB ENVIRONMENT SETUP<h1/>
-
-
-<h3>Creating a virtual lab in VirtualBox to test malware, networks, vulnerability assessment, and understand how other operating systems work, e.g Kali Linux </h3>
+Building an isolated virtual lab in VirtualBox with Kali Linux for practising penetration testing, network analysis, and vulnerability assessment safely.
 
 ---
 
-## 1. Goal🥅
-To provide a safe, isolated, and pre-configured environment for penetration testing, ethical hacking, digital forensics, and vulnerability assessment.
-1. Safety and Isolation - test scripts in a safe place
-2. Pre-Loaded Security Toolkit - use hundreds of tools at my disposal
-3. Snapshots and Easy Recovery - restoration to safe points
-4. Portability and Low Resource Needs - takes less space and is less resource-intensive
+## 1. Goal 🥅
+To build a safe, isolated, pre-configured environment for penetration testing, ethical hacking, digital forensics, and vulnerability assessment.
+
+1. **Safety and isolation:** I can run scripts and tools in a contained place that cannot harm my main system.
+2. **Pre-loaded security toolkit:** Kali comes with hundreds of security tools ready to use.
+3. **Snapshots and easy recovery:** I can restore the VM to a known-good state if something breaks.
+4. **Portability and low resource needs:** the lab takes little space and runs on a normal laptop.
 
 ## 2. My Lab at a Glance
+
 | Item | My setting |
 |------|------------|
-| Host OS | Kali Linux|
-| VirtualBox version |VirtualBox 7.2.20  |
-| Kali version | 2026.2 |
-| Network type and name | NAT (NatNetwork)|
-| Network range | 10.0.0.1-10.0.0.254 |
+| Host OS | Windows 11 26H2 |
+| VirtualBox version | VirtualBox 7.2.20 |
+| Guest OS | Kali Linux 2026.2 |
+| Network type and name | NAT Network (`NatNetwork`) |
+| Network range | 10.0.0.0/24 (usable addresses 10.0.0.1 to 10.0.0.254) |
 | Kali IP / gateway / DNS | 10.0.0.2 / 10.0.0.1 / 8.8.8.8 |
 
 ## 3. How I Built It
-<!-- One short step each. Say what you did, why, and add a screenshot. -->
 
-### Step 1:VirtualBox Installation
-Downloaded the VirtualBox application from the main website, followed all installation instructions, and got the Kali sign-in window.
-<img width="960" height="822" alt="image" src="https://github.com/user-attachments/assets/83478bc0-57bc-4fe2-aac1-9708257562ae" />
+### Step 1: VirtualBox installation
+I downloaded VirtualBox from its official website and followed the installer. I then created the Kali virtual machine and adjusted the display, CPU, and memory settings to make it stable.
 
-Tweaked the settings for the display, cpu and memory to make the virtual machine stable.
-<img width="1919" height="1031" alt="image" src="https://github.com/user-attachments/assets/73309d0f-4ec4-474b-aa2f-4ac3045c33a9" />
+<img width="960" height="822" alt="VirtualBox with the Kali VM" src="https://github.com/user-attachments/assets/83478bc0-57bc-4fe2-aac1-9708257562ae" />
 
-Successfully got the sign-in
-<img width="960" height="1032" alt="image" src="https://github.com/user-attachments/assets/30b430c1-903a-43b8-95a3-5d5274a97363" />
+<img width="1919" height="1031" alt="VM display, CPU and memory settings" src="https://github.com/user-attachments/assets/73309d0f-4ec4-474b-aa2f-4ac3045c33a9" />
+
+After this, Kali booted and I reached the sign-in screen.
+
+<img width="960" height="1032" alt="Kali sign-in screen" src="https://github.com/user-attachments/assets/30b430c1-903a-43b8-95a3-5d5274a97363" />
 
 ### Step 2: Creating the NAT Network
-Set the network to NAT
-<img width="961" height="1028" alt="Screenshot 2026-10-26 042100" src="https://github.com/user-attachments/assets/69d2031d-121b-493f-b9d9-5f08adc4722a" />
+In VirtualBox's Network Manager, I created a NAT Network called `NatNetwork` with the range `10.0.0.0/24` and DHCP enabled. This is the virtual network the lab machines will share. No VM is connected to it yet at this stage.
 
-### Step 3: Importing Kali and attaching the adapter
-Changed the network in adapter 1 from NAT to NatNetwork
-<img width="781" height="518" alt="image" src="https://github.com/user-attachments/assets/6661cf6a-b9e3-4dd6-a26c-68a82ac291b0" />
+<img width="961" height="1028" alt="NatNetwork settings in Network Manager" src="https://github.com/user-attachments/assets/69d2031d-121b-493f-b9d9-5f08adc4722a" />
+
+### Step 3: Installing Kali and attaching the adapter
+I downloaded the Kali ISO from kali.org and used it to create the VM, choosing Debian (64-bit) as the OS type.
+
+<img width="788" height="552" alt="Creating the Kali VM" src="https://github.com/user-attachments/assets/2c0ba848-f621-45bf-a5ca-f2bc03d84d5c" />
+
+Then I opened Settings > Network > Adapter 1 and changed **Attached to** from NAT to **NAT Network**, selecting `NatNetwork`. (The adapter was on plain NAT at first, which caused my connection problem described in section 5.)
+
+<img width="781" height="518" alt="Adapter 1 attached to NatNetwork" src="https://github.com/user-attachments/assets/6661cf6a-b9e3-4dd6-a26c-68a82ac291b0" />
 
 ### Step 4: Setting the IP address
-Set the IP address of the Kali machine to 10.0.0.2, the default gateway to 10.0.0.1, and DNS to 8.8.8.8
-<img width="698" height="547" alt="image" src="https://github.com/user-attachments/assets/ac02adf0-aea0-48f2-ad27-16ac34d11699" />
+I set a static IPv4 address of 10.0.0.2/24 on Kali, with 10.0.0.1 as the default gateway and 8.8.8.8 as the DNS server.
 
-### Step 5: shared clipboard / guest tools/snapshot
-I tried to copy and paste text from the host and virtual machine and vice versa, but it was not working, so I resorted to tweaking the settings to allow bidirectional copy and paste, which was successful.
-<img width="781" height="514" alt="image" src="https://github.com/user-attachments/assets/e41655c4-d737-4f92-8254-8c11ccb23566" />
+<img width="698" height="547" alt="Static IP settings in Kali" src="https://github.com/user-attachments/assets/ac02adf0-aea0-48f2-ad27-16ac34d11699" />
 
+### Step 5: Shared clipboard and snapshot
+Copy and paste between Windows and Kali did not work at first. The VM's **Shared Clipboard** setting was Disabled, so I changed it to **Bidirectional**, and copying in both directions worked.
 
+<img width="781" height="514" alt="Shared Clipboard set to Bidirectional" src="https://github.com/user-attachments/assets/e41655c4-d737-4f92-8254-8c11ccb23566" />
 
-## 4. Proof It Works
-<!-- Commands you ran and a screenshot of each result -->
+Finally, I took a snapshot of the working VM so I can restore it to a safe state.
+
+<img width="955" height="365" alt="Snapshot of the Kali VM" src="https://github.com/user-attachments/assets/f979d608-e563-4817-870e-5fbff62485e2" />
+
+## 4. Proof It Works 🧾
 
 | Test | Command | What I saw |
 |------|---------|------------|
-| My IP | `ip a` | 10.0.0.2|
-<img width="644" height="515" alt="image" src="https://github.com/user-attachments/assets/98efd0d9-20c4-4bd9-b6af-78dff12ad124" />
+| My IP | `ip a` | `eth0` has 10.0.0.2/24 |
+| Gateway | `ping -c 4 10.0.0.1` | 4 sent, 4 received, 0% packet loss |
+| Internet | `ping -c 4 8.8.8.8` | 4 sent, 4 received, 0% packet loss |
+| DNS | `nslookup networkwalks.com` | The domain name resolved to an IP address |
 
-| Gateway | `ping ...` | 10.0.0.1 |
-<img width="651" height="521" alt="image" src="https://github.com/user-attachments/assets/f4d439a3-80e0-4af1-9eef-776626e875c0" />
+**My IP:**
 
-| Internet | `ping ...` | 8.8.8.8 |
-<img width="647" height="271" alt="image" src="https://github.com/user-attachments/assets/3e58dc19-e374-47f5-8be8-4087be78ebcd" />
+<img width="644" height="515" alt="ip a output" src="https://github.com/user-attachments/assets/98efd0d9-20c4-4bd9-b6af-78dff12ad124" />
 
+**Gateway:**
 
-| DNS | `nslookup ...` | 8.8.8.8|
-<img width="646" height="378" alt="image" src="https://github.com/user-attachments/assets/83a5965a-21de-49c3-badb-8e45bfc09d53" />
+<img width="651" height="521" alt="Gateway ping" src="https://github.com/user-attachments/assets/f4d439a3-80e0-4af1-9eef-776626e875c0" />
 
+**Internet:**
 
-## 5. Problems I Hit and How I Fixed Them
-<!-- Repeat this block for each problem -->
-When I first set the IP as per the instructions, the internet was not working, and the VM couldn't ping its gateway address.
-<img width="652" height="784" alt="Screenshot 2026-10-25 182618" src="https://github.com/user-attachments/assets/59e24ea7-954b-4c71-a497-21e4d20625ca" />
+<img width="647" height="271" alt="Internet ping" src="https://github.com/user-attachments/assets/3e58dc19-e374-47f5-8be8-4087be78ebcd" />
 
+**DNS:**
 
+<!-- REPLACE THIS IMAGE: retake the screenshot using "nslookup networkwalks.com", since looking up 8.8.8.8 does not test name resolution -->
+<img width="646" height="378" alt="nslookup output" src="https://github.com/user-attachments/assets/83a5965a-21de-49c3-badb-8e45bfc09d53" />
 
-### Problem: [short name]
-- <h3>What I saw:<h3/>
-    The destination was unreachable; no internet connectivity
-- **How I investigated:**
--  used ip a, ip route, ip neigh
-- **What the clue was:**
-- when I ran ip neigh, it located the failure; it showed 10.0.0.1 dev eth0 FAILED
-- Kali had asked "who has 10.0.0.1" on my local network and no one answered.
-- Together with the “Destination Host Unreachable” replies coming from 10.0.0.2 (my own address), this meant the gateway wasn’t on the network Kali was actually plugged into. At this stage, the problem could still have been a wrong subnet, a wrong gateway, or a wrong attachment.
-- **The fix:** [what I changed]
-- **Result:** [how I confirmed it worked]
+## 5. Problems I Hit and How I Fixed Them 🚩🛠️
+
+### Problem 1: No internet because the adapter was on NAT instead of NAT Network
+
+#### What I saw
+After setting the static IP (10.0.0.2, gateway 10.0.0.1), every ping failed with "Destination Host Unreachable", and the VM had no internet.
+
+<img width="652" height="784" alt="Ping errors" src="https://github.com/user-attachments/assets/580f9042-7cfc-4d7f-8ebf-e5c1a77b2988" />
+
+#### How I investigated
+- `ip a` and `ip route` showed my settings had been applied (10.0.0.2/24, default route via 10.0.0.1).
+- `ip neigh` showed `10.0.0.1 dev eth0 FAILED`, meaning nothing on the network answered for the gateway address.
+- I ran the three `nmcli` commands from the lab slide (the DAD timeout fix), but the problem stayed.
+- I switched Kali to automatic (DHCP) addressing to find out which network the VM was really on.
+
+<img width="652" height="352" alt="ip neigh output" src="https://github.com/user-attachments/assets/38e436e3-57e8-4fa4-991f-70dc97665eee" />
+
+#### What the clue was
+With DHCP, Kali received **10.0.2.15** with gateway **10.0.2.2**. That is the range VirtualBox uses for plain **NAT**, not my NatNetwork (10.0.0.0/24). I checked the NAT Network settings and they were correct, which ruled out a wrong subnet. Then I opened the VM's adapter settings and found **Attached to: NAT**.
+
+<!-- ADD SCREENSHOT: the DHCP output showing 10.0.2.15 -->
+<!-- ADD SCREENSHOT: the adapter settings showing "Attached to: NAT" -->
+
+#### The fix
+I shut the VM down, changed Adapter 1 to **Attached to: NAT Network** with the name **NatNetwork**, and started it again. My static IP settings were already saved, so I did not need to change them.
+
+#### Result
+`ping 10.0.0.1` and `ping 8.8.8.8` both received replies, and the internet worked.
+
+<img width="648" height="508" alt="Working ping after the fix" src="https://github.com/user-attachments/assets/0a035e3b-0437-4cef-bd7a-6b587cc4c6f7" />
+
+#### Lesson
+When I see "Destination Host Unreachable" coming from my own IP address, I should first check how the VM's adapter is attached, before changing IP settings.
+
+### Problem 2: Copy and paste not working
+Copy and paste between Windows and Kali did nothing. The cause was the VM's Shared Clipboard setting, which was **Disabled**. I changed it to **Bidirectional** and it worked (see Step 5).
 
 ## 6. What I Learned
-<!-- 3 to 5 points, each in your own words. Say why it matters, not just what it is. -->
-- [...]
-- [...]
-- [...]
+- **Setting up a virtual lab:** I installed VirtualBox, created a Kali VM, and got it running with stable settings.
+- **NAT versus NAT Network:** Plain NAT gives each VM its own private connection to the internet (10.0.2.x), while a NAT Network is a shared virtual network where lab machines can reach one another. Creating the network is not enough, because the VM's adapter must also be attached to it.
+- **Reading network output:** `ip neigh` showed that the gateway never answered, and the DHCP test showed which network Kali was really on. Testing with automatic addressing was a quick way to find the cause.
+- **Static IP configuration:** I configured a static private IPv4 address (10.0.0.2/24) with a gateway and a DNS server.
+- **Verifying connectivity:** I used `ping` and `nslookup` to prove that the gateway, the internet, and DNS all work.
+- **Shared clipboard:** I learned that guest tools can be running and the feature still fails if the setting on the VirtualBox side is disabled.
+- **Snapshots:** I learned that a snapshot gives me a safe point to restore, which matters when testing risky tools.
 
 ## 7. Safety and Ethics
-<!-- One or two sentences: who and what you may test, and that this lab is for systems you own or have permission to test -->
-[...]
+This lab is for learning and is isolated: Kali runs inside VirtualBox on a private NAT Network, separate from my main system. I will only test machines I own, my own lab VMs, or deliberately vulnerable training targets that allow it, and I will get written permission before testing anything else. Unauthorised access is illegal even when nothing is damaged, so I will not scan or attack systems outside that scope. The shared clipboard is set to bidirectional for convenience, so before handling any malware samples I will switch it off and tighten the isolation.
 
 ## 8. Tools Used
-- [tool and link]
+- **VirtualBox 7.2.20:** virtualisation platform for the lab
+- **Kali Linux 2026.2:** the guest OS used for security testing
+- **Command-line tools:** `ip a`, `ip route`, `ip neigh`, `ping`, `nslookup`
+- **`nmcli` (NetworkManager):** applying and checking the network configuration
+- **GitHub:** documenting the project
 
 ---
-**Author:** [Your name] | Networkwalks Cybersecurity Program, Batch [your batch] | Week 1
+**Author:** Delon Omusi Owiti | Networkwalks Cybersecurity Program, Batch B084 | Week 1
