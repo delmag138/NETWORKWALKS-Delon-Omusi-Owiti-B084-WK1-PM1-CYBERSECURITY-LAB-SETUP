@@ -87,8 +87,7 @@ Finally, I took a snapshot of the working VM so I can restore it to a safe state
 
 **DNS:**
 
-<!-- REPLACE THIS IMAGE: retake the screenshot using "nslookup networkwalks.com", since looking up 8.8.8.8 does not test name resolution -->
-<img width="646" height="378" alt="nslookup output" src="https://github.com/user-attachments/assets/83a5965a-21de-49c3-badb-8e45bfc09d53" />
+<img width="646" height="520" alt="image" src="https://github.com/user-attachments/assets/1b3b5be6-d11f-4356-96c9-13e7fd11428b" />
 
 ## 5. Problems I Hit and How I Fixed Them 🚩🛠️
 
@@ -108,10 +107,20 @@ After setting the static IP (10.0.0.2, gateway 10.0.0.1), every ping failed with
 <img width="652" height="352" alt="ip neigh output" src="https://github.com/user-attachments/assets/38e436e3-57e8-4fa4-991f-70dc97665eee" />
 
 #### What the clue was
-With DHCP, Kali received **10.0.2.15** with gateway **10.0.2.2**. That is the range VirtualBox uses for plain **NAT**, not my NatNetwork (10.0.0.0/24). I checked the NAT Network settings and they were correct, which ruled out a wrong subnet. Then I opened the VM's adapter settings and found **Attached to: NAT**.
+With DHCP, Kali received **10.0.2.15** with gateway **10.0.2.2**. That is the range VirtualBox uses for plain **NAT**, not my NatNetwork (10.0.0.0/24). I checked the NAT Network settings, and they were correct, which ruled out a wrong subnet. Then I opened the VM's adapter settings and found **Attached to: NAT**.
 
-<!-- ADD SCREENSHOT: the DHCP output showing 10.0.2.15 -->
-<!-- ADD SCREENSHOT: the adapter settings showing "Attached to: NAT" -->
+
+Output after switching to automatic (DHCP) addressing:
+
+```
+inet 10.0.2.15/24 brd 10.0.2.255 scope global dynamic noprefixroute eth0
+default via 10.0.2.2 dev eth0 proto dhcp src 10.0.2.15 metric 100
+10.0.2.0/24 dev eth0 proto kernel scope link src 10.0.2.15 metric 100
+```
+
+<img width="769" height="517" alt="image" src="https://github.com/user-attachments/assets/984eb40e-5dfa-486e-9da9-873161adec74" />
+
+
 
 #### The fix
 I shut the VM down, changed Adapter 1 to **Attached to: NAT Network** with the name **NatNetwork**, and started it again. My static IP settings were already saved, so I did not need to change them.
